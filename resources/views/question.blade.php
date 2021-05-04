@@ -8,10 +8,19 @@
 </head>
 
 <body class="antialiased">
-    {{$score}}
+    page:
     @foreach($question_all as $q)
-    @if($q["id"] == $question)
-    <form method="POST" action="/score">
+    <form method="POST" action="{{ route('page', ['page' => $q['id']]) }}">
+        @csrf
+        <button type="submit">{{$q["id"]}}</button>
+    </form>
+    @endforeach
+
+    <br />
+    score: {{$score}}
+    @foreach($question_all as $q)
+    @if($q["id"] == $page)
+    <form method="POST" action="{{ route('page', ['page' => $q['id']+1]) }}">
         @csrf
         {{$q["question_name"]}} <br />
         <input type="radio" name="radio_{{$q['id']}}" value="{{$q['result_a']['score']}}" /> {{$q["result_a"]["name"]}} <br />
@@ -26,7 +35,5 @@
     @endif
     @endforeach
 </body>
-
-
 
 </html>

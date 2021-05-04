@@ -19,4 +19,6 @@ Route::get('/', function () {
 });
 
 Route::get('/question', [QuestionController::class, 'question']);
-Route::post('/score', [QuestionController::class, 'score']);
+Route::post('/question/{page}', [QuestionController::class, 'page'])->name('page');
+Route::get('/clear', [QuestionController::class, 'delete_session']);
+Route::get('/get', [QuestionController::class, 'get_session']);

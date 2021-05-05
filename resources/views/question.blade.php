@@ -23,6 +23,7 @@
     <form method="POST" action="{{ route('page', ['page' => $q['id']+1]) }}">
         @csrf
         {{$q["question_name"]}} <br />
+
         <input type="radio" name="radio_{{$q['id']}}" value="{{$q['result_a']['score']}}" /> {{$q["result_a"]["name"]}} <br />
         <input type="radio" name="radio_{{$q['id']}}" value="{{$q['result_b']['score']}}" /> {{$q["result_b"]["name"]}} <br />
         <input type="radio" name="radio_{{$q['id']}}" value="{{$q['result_c']['score']}}" /> {{$q["result_c"]["name"]}} <br />

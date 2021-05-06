@@ -46,11 +46,15 @@ class QuestionController extends Controller
 
         $path_json = Storage::disk('local')->get('question.json');
         $question_all = json_decode($path_json, true);
-        
+
+        $question_checked['score'] = 5678;
+        $question_checked = $this->filter_by_key_value($request->session()->get('score_all'), 'question', $page);
+
         return view("question")
             ->with("question_all", $question_all)
             ->with("page", $page)
-            ->with("score", $score_all + $score);
+            ->with("score", $score_all + $score)
+            ->with("question_checked", $question_checked);
     }
 
     public function delete_session(Request $request)
@@ -84,15 +88,16 @@ class QuestionController extends Controller
 
     public function filter_by_key_value($array, $index, $value)
     {
+        $newarray = [];
         if (is_array($array) && count($array) > 0) {
             foreach (array_keys($array) as $key) {
                 $temp[$key] = $array[$key][$index];
 
                 if ($temp[$key] == $value) {
-                    $newarray[$key] = $array[$key];
+                    $newarray = $array[$key];
                 }
             }
         }
-        return $newarray[0];
+        return $newarray;
     }
 }

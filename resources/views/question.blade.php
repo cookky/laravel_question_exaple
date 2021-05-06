@@ -12,6 +12,7 @@
     @foreach($question_all as $q)
     <form method="POST" action="{{ route('page', ['page' => $q['id']]) }}">
         @csrf
+        <input type="hidden" name="question_lasted" value="{{$q['id']}}" />
         <button type="submit">{{$q["id"]}}</button>
     </form>
     @endforeach
@@ -24,10 +25,15 @@
         @csrf
         {{$q["question_name"]}} <br />
 
-        <input type="radio" name="radio_{{$q['id']}}" value="{{$q['result_a']['score']}}" /> {{$q["result_a"]["name"]}} <br />
-        <input type="radio" name="radio_{{$q['id']}}" value="{{$q['result_b']['score']}}" /> {{$q["result_b"]["name"]}} <br />
-        <input type="radio" name="radio_{{$q['id']}}" value="{{$q['result_c']['score']}}" /> {{$q["result_c"]["name"]}} <br />
-        <input type="radio" name="radio_{{$q['id']}}" value="{{$q['result_d']['score']}}" /> {{$q["result_d"]["name"]}} <br />
+        @foreach($q['result'] as $result)
+
+        @if($result['score'] == $question_checked['score'])
+        <input type="radio" name="radio_{{$q['id']}}" value="{{$result['score']}}" checked /> {{$result["name"]}} <br />
+        @else
+        <input type="radio" name="radio_{{$q['id']}}" value="{{$result['score']}}" /> {{$result["name"]}} <br />
+        @endif
+        
+        @endforeach
 
         <input type="hidden" name="score_all" value="{{$score}}" />
         <input type="hidden" name="question" value="{{$q['id']}}" />

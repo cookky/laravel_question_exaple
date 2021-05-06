@@ -15,7 +15,8 @@ class QuestionController extends Controller
         return view("question")
             ->with("question_all", $question_all)
             ->with("page", 1)
-            ->with("score", 0);
+            ->with("score", 0)
+            ->with("question_checked", 5678);
     }
 
     public function page(Request $request, $page)

@@ -32,7 +32,7 @@
         @else
         <input type="radio" name="radio_{{$q['id']}}" value="{{$result['score']}}" /> {{$result["name"]}} <br />
         @endif
-        
+
         @endforeach
 
         <input type="hidden" name="score_all" value="{{$score}}" />
@@ -41,6 +41,11 @@
     </form>
     @endif
     @endforeach
+
+    <br>
+    @if($page > count($question_all))
+    info user
+    @endif
 </body>
 
 </html>

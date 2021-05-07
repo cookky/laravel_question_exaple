@@ -9,7 +9,7 @@ class QuestionController extends Controller
 {
     public function question()
     {
-        $path_json = Storage::disk('local')->get('question.json');
+        $path_json = Storage::disk('data_store')->get('question.json');
         $question_all = json_decode($path_json, true);
         $question_checked = ["question" => "99999", 'score' => '99999'];
         return view("question")
@@ -46,7 +46,7 @@ class QuestionController extends Controller
             }
         }
 
-        $path_json = Storage::disk('local')->get('question.json');
+        $path_json = Storage::disk('data_store')->get('question.json');
         $question_all = json_decode($path_json, true);
 
         $question_checked = ["question" => "99999", 'score' => '99999'];

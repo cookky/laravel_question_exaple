@@ -52,6 +52,11 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'data_store' => [
+            'driver' => 'local',
+            'root' => public_path('/'),
+        ],
+
     ],
 
     /*

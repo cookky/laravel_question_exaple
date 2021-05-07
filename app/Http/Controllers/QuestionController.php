@@ -11,12 +11,12 @@ class QuestionController extends Controller
     {
         $path_json = Storage::disk('local')->get('question.json');
         $question_all = json_decode($path_json, true);
-
+        $question_checked = ["question" => "99999", 'score' => '99999'];
         return view("question")
             ->with("question_all", $question_all)
             ->with("page", 1)
             ->with("score", 0)
-            ->with("question_checked", 5678);
+            ->with("question_checked", $question_checked);
     }
 
     public function page(Request $request, $page)
@@ -28,6 +28,7 @@ class QuestionController extends Controller
         $score_arr = array();
         if ($request->session()->has('score_all')) {
             if ($question != null) {
+
                 $score_arr = $request->session()->get('score_all');
 
                 $change_value = $this->filter_by_value_change($score_arr, 'question', $question, $score);
@@ -48,9 +49,10 @@ class QuestionController extends Controller
         $path_json = Storage::disk('local')->get('question.json');
         $question_all = json_decode($path_json, true);
 
-        $question_checked['score'] = 5678;
+        $question_checked = ["question" => "99999", 'score' => '99999'];
         $question_checked = $this->filter_by_key_value($request->session()->get('score_all'), 'question', $page);
 
+        
         return view("question")
             ->with("question_all", $question_all)
             ->with("page", $page)
@@ -89,16 +91,16 @@ class QuestionController extends Controller
 
     public function filter_by_key_value($array, $index, $value)
     {
-        $newarray = [];
+        $question_checked = ["question" => "99999", 'score' => '99999'];
         if (is_array($array) && count($array) > 0) {
             foreach (array_keys($array) as $key) {
                 $temp[$key] = $array[$key][$index];
 
                 if ($temp[$key] == $value) {
-                    $newarray = $array[$key];
+                    $question_checked = $array[$key];
                 }
             }
         }
-        return $newarray;
+        return $question_checked;
     }
 }

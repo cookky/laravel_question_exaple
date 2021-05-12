@@ -2,35 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class QuestionController extends Controller
 {
-    public function question()
-    {
-        $path_json = Storage::disk('data_store')->get('question.json');
-        $question_all = json_decode($path_json, true);
-        $question_checked = ["question" => "99999", 'score' => '99999'];
-        return view("question")
-            ->with("question_all", $question_all)
-            ->with("page", 1)
-            ->with("score", 0)
-            ->with("question_checked", $question_checked);
-    }
-
-    public function page(Request $request, $page)
-    {
+    public function saveScore(Request $request){
         $question = $request->question;
-        $score_all = $request->score_all;
         $score = $request->input('radio_' . $question);
 
         $score_arr = array();
         if ($request->session()->has('score_all')) {
             if ($question != null) {
-
                 $score_arr = $request->session()->get('score_all');
-
                 $change_value = $this->filter_by_value_change($score_arr, 'question', $question, $score);
                 if ($change_value[0] == true) {
                     $request->session()->put('score_all', $change_value[1]);
@@ -46,17 +31,51 @@ class QuestionController extends Controller
             }
         }
 
+        return redirect()->route('question.page', ['page' => $question+1]);;
+    }
+    public function store(Request $request)
+    {
+        $rules = [
+            'email' => 'required',
+            'password' => 'required',
+        ];
+        $messages = [
+            'email.required' => 'ต้องกรอก ชื่อเรื่องก่อน.',
+            'password.required' => 'ต้องกรอกข้อมูล.',
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            return redirect('form')
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+    }
+
+    public function question()
+    {
+        $path_json = Storage::disk('data_store')->get('question.json');
+        $question_all = json_decode($path_json, true);
+        $question_checked = ["question" => "99999", 'score' => '99999'];
+        return view("question")
+            ->with("question_all", $question_all)
+            ->with("page", 1)
+            ->with("score", 0)
+            ->with("question_checked", $question_checked);
+    }
+
+    public function page(Request $request, $page)
+    {
         $path_json = Storage::disk('data_store')->get('question.json');
         $question_all = json_decode($path_json, true);
 
         $question_checked = ["question" => "99999", 'score' => '99999'];
         $question_checked = $this->filter_by_key_value($request->session()->get('score_all'), 'question', $page);
-
         
         return view("question")
             ->with("question_all", $question_all)
             ->with("page", $page)
-            ->with("score", $score_all + $score)
+            ->with("score", 0)
             ->with("question_checked", $question_checked);
     }
 

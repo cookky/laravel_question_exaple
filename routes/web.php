@@ -19,6 +19,12 @@ Route::get('/', function () {
 });
 
 Route::get('/question', [QuestionController::class, 'question']);
-Route::post('/question/{page}', [QuestionController::class, 'page'])->name('page');
+Route::get('/question/{page}', [QuestionController::class, 'page'])->name('question.page');
+Route::post('/save-score', [QuestionController::class, 'saveScore']);
 Route::get('/clear', [QuestionController::class, 'delete_session']);
 Route::get('/get', [QuestionController::class, 'get_session']);
+
+Route::get('/form', function() {
+    return view('form_data');
+});
+Route::post('/store', [QuestionController::class, 'store']);

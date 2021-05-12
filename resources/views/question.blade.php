@@ -10,18 +10,16 @@
 <body class="antialiased">
     page:
     @foreach($question_all as $q)
-    <form method="POST" action="{{ route('page', ['page' => $q['id']]) }}">
-        @csrf
-        <input type="hidden" name="question_lasted" value="{{$q['id']}}" />
+    <a href="/question/{{$q['id']}}">
         <button type="submit">{{$q["id"]}}</button>
-    </form>
+    </a>
     @endforeach
 
     <br />
     score: {{$score}}
     @foreach($question_all as $q)
     @if($q["id"] == $page)
-    <form method="POST" action="{{ route('page', ['page' => $q['id']+1]) }}">
+    <form method="POST" action="/save-score">
         @csrf
         {{$q["question_name"]}} <br />
 
